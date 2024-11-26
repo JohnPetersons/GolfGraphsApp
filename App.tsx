@@ -19,7 +19,7 @@ import {
 import { Int32 } from 'react-native/Libraries/Types/CodegenTypes';
 import { ItemComp, ItemProps } from './src/views/ItemComp';
 import { PageHeader } from './src/views/PageHeader';
-import { menus } from './src/config/menuStructure';
+import { menus } from './src/config/menuStructure'; 
 
 function App(): React.JSX.Element {
 
