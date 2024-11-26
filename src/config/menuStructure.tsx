@@ -58,4 +58,33 @@ export const menus = [{
             // setDataFnc: setData
         }
     }]
+},{
+    label: "Items List",
+    typeOfItem: "menu",
+    items: [{
+        label: "test input 2",
+        typeOfItem: "inlineInput",
+        items: [],
+        fncs: {
+            // getDataFnc: () => data,
+            // setDataFnc: setData
+        }
+    },{
+        label: "test input 3",
+        typeOfItem: "inlineInput",
+        items: [],
+        fncs: {
+            // getDataFnc: () => data,
+            // setDataFnc: setData
+        }
+    }],
+    fncs: {}
+},{
+    label: "Item 4",
+    typeOfItem: "inlineInput",
+    items: [],
+    fncs: {
+        // getDataFnc: () => data,
+        // setDataFnc: setData
+    }
 }];

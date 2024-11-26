@@ -23,18 +23,9 @@ import { ItemComp, ItemProps } from './src/views/ItemComp';
 import { PageHeader } from './src/views/PageHeader';
 import { menus } from './src/config/menuStructure';
 
-type DataContextType = {
-  data: any,
-  setData: (item: any) => void
-}
+function App(): React.JSX.Element { 
 
-export const DataContext = createContext({} as DataContextType);
-
-function App(): React.JSX.Element {
-
-  const [data, setData] = useState({
-    item: "test"
-  });
+  
 
   const allItems = menus;
 
@@ -95,12 +86,10 @@ function App(): React.JSX.Element {
     addPreviousItem(pia as []);
   }
 
+  
+
 
   return (
-    <DataContext.Provider 
-      value={{
-        data, 
-        setData}}>
       <SafeAreaView style={{backgroundColor: false ? "black" : "lightgrey"}}>
         <PageHeader title={titleItem as any} previousItems={previousItemArray} onPressFnc={goBackXItems}>
 
@@ -116,7 +105,6 @@ function App(): React.JSX.Element {
             }}></ItemComp>)}
         </ScrollView>
       </SafeAreaView>
-    </DataContext.Provider>
   );
 }
 
