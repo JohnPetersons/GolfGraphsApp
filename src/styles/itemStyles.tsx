@@ -46,6 +46,14 @@ const styles = StyleSheet.create({
     fontSize: 17,
     margin: 2.5,
     padding: 2.5
+  },
+  itemInput: {
+    flex: 0,
+    minWidth: (2 * windowWidth / 5) - 5,
+    maxWidth: (2 * windowWidth / 5) - 5,
+    fontSize: 17,
+    margin: 2.5,
+    backgroundColor: "white"
   }
 });
 

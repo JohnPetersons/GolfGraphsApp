@@ -1,6 +1,7 @@
 import type {PropsWithChildren} from 'react';
-import { ItemWithMenu, ItemWithMenuProps } from './ItemWithMenu';
+import { ItemWithMenu } from './ItemWithMenu';
 import { ItemWithExpansion } from './ItemWithExpansion';
+import { ItemInlineInput } from './ItemInlineInput';
 /*
     Types of items:
     "exp": expansion
@@ -25,6 +26,8 @@ export function ItemComp({label, items, typeOfItem, fncs}: ItemProps): React.JSX
         return (
         <ItemWithExpansion key={label} label={label} items={items} typeOfItem={typeOfItem} fncs={fncs}></ItemWithExpansion>
         );
+    } else if (typeOfItem == "inlineInput") {
+        return <ItemInlineInput key={label} label={label} fncs={fncs}></ItemInlineInput>
     } else {
         return (
         <ItemWithMenu key={label} label={label} items={items} typeOfItem={typeOfItem} fncs={fncs}></ItemWithMenu>

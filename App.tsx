@@ -8,7 +8,9 @@
 // import React from 'react';
 import {
   useState,
-  useEffect
+  useEffect,
+  useContext,
+  createContext
  } from 'react';
 import {
   SafeAreaView,
@@ -19,9 +21,18 @@ import {
 import { Int32 } from 'react-native/Libraries/Types/CodegenTypes';
 import { ItemComp, ItemProps } from './src/views/ItemComp';
 import { PageHeader } from './src/views/PageHeader';
-import { menus } from './src/config/menuStructure'; 
+import { menus } from './src/config/menuStructure';
+
+type DataContextType = {
+  data: () => string,
+  setData: (str: string) => void
+}
+
+export const DataContext = createContext({} as DataContextType);
 
 function App(): React.JSX.Element {
+
+  const [data, setData] = useState("");
 
   const allItems = menus;
 
@@ -84,21 +95,26 @@ function App(): React.JSX.Element {
 
 
   return (
-    <SafeAreaView style={{backgroundColor: false ? "black" : "lightgrey"}}>
-      <PageHeader title={titleItem as any} previousItems={previousItemArray} onPressFnc={goBackXItems}>
+    <DataContext.Provider 
+      value={{
+        data: () => data, 
+        setData}}>
+      <SafeAreaView style={{backgroundColor: false ? "black" : "lightgrey"}}>
+        <PageHeader title={titleItem as any} previousItems={previousItemArray} onPressFnc={goBackXItems}>
 
-      </PageHeader>
-      <ScrollView>
-        {currentItems.map((item) => <ItemComp label={item.label} 
-          key={item.label}
-          typeOfItem={item.typeOfItem}
-          items={item.items as []}
-          fncs={{
-            "titleOnPressFnc": addToPreviousItemArray,
-            "currentItemsOnPressFnc":setCurrentItems
-          }}></ItemComp>)}
-      </ScrollView>
-    </SafeAreaView>
+        </PageHeader>
+        <ScrollView>
+          {currentItems.map((item) => <ItemComp label={item.label} 
+            key={item.label}
+            typeOfItem={item.typeOfItem}
+            items={item.items as []}
+            fncs={{
+              "titleOnPressFnc": addToPreviousItemArray,
+              "currentItemsOnPressFnc":setCurrentItems
+            }}></ItemComp>)}
+        </ScrollView>
+      </SafeAreaView>
+    </DataContext.Provider>
   );
 }
 
