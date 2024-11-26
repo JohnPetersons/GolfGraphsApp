@@ -30,7 +30,7 @@ export function ItemInlineInput({label, fncs}: ItemInlineInputProps): React.JSX.
             <Text style={styles.itemLabel}>
             {label}
             </Text>
-            <TextInput style={styles.itemInput} onChangeText={setData}>{data()}</TextInput>
+            <TextInput style={styles.itemInput} onChangeText={setData}>{data}</TextInput>
         </View>
     );
 }

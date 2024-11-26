@@ -1,7 +1,12 @@
+import {
+    useState,
+    useContext
+    } from 'react';
 import type {PropsWithChildren} from 'react';
 import { ItemWithMenu } from './ItemWithMenu';
 import { ItemWithExpansion } from './ItemWithExpansion';
 import { ItemInlineInput } from './ItemInlineInput';
+import { DataContext } from '../../App';
 /*
     Types of items:
     "exp": expansion
@@ -22,12 +27,24 @@ type ItemProps = PropsWithChildren<{
 }>;
 
 export function ItemComp({label, items, typeOfItem, fncs}: ItemProps): React.JSX.Element {
+
+    const {data, setData} = useContext(DataContext);
+
     if (typeOfItem == "exp") {
         return (
         <ItemWithExpansion key={label} label={label} items={items} typeOfItem={typeOfItem} fncs={fncs}></ItemWithExpansion>
         );
     } else if (typeOfItem == "inlineInput") {
-        return <ItemInlineInput key={label} label={label} fncs={fncs}></ItemInlineInput>
+        return (
+            <DataContext.Provider
+                value={{
+                    data: data.item,
+                    setData: (val) => setData({
+                        item: val
+                    })
+                }}>
+            <ItemInlineInput key={label} label={label} fncs={fncs}></ItemInlineInput></DataContext.Provider>
+        );
     } else {
         return (
         <ItemWithMenu key={label} label={label} items={items} typeOfItem={typeOfItem} fncs={fncs}></ItemWithMenu>

@@ -24,15 +24,17 @@ import { PageHeader } from './src/views/PageHeader';
 import { menus } from './src/config/menuStructure';
 
 type DataContextType = {
-  data: () => string,
-  setData: (str: string) => void
+  data: any,
+  setData: (item: any) => void
 }
 
 export const DataContext = createContext({} as DataContextType);
 
 function App(): React.JSX.Element {
 
-  const [data, setData] = useState("");
+  const [data, setData] = useState({
+    item: "test"
+  });
 
   const allItems = menus;
 
@@ -97,7 +99,7 @@ function App(): React.JSX.Element {
   return (
     <DataContext.Provider 
       value={{
-        data: () => data, 
+        data, 
         setData}}>
       <SafeAreaView style={{backgroundColor: false ? "black" : "lightgrey"}}>
         <PageHeader title={titleItem as any} previousItems={previousItemArray} onPressFnc={goBackXItems}>
