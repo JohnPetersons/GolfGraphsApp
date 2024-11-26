@@ -5,114 +5,101 @@
  * @format
  */
 
-import React from 'react';
-import type {PropsWithChildren} from 'react';
+// import React from 'react';
+import {
+  useState,
+  useEffect
+ } from 'react';
 import {
   SafeAreaView,
   ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
+  Alert,
+  BackHandler 
 } from 'react-native';
-
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
-
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
+import { Int32 } from 'react-native/Libraries/Types/CodegenTypes';
+import { ItemComp, ItemProps } from './src/views/ItemComp';
+import { PageHeader } from './src/views/PageHeader';
+import { menus } from './src/config/menuStructure';
 
 function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+  const allItems = menus;
+
+  const [previousItemArray, addPreviousItem] = useState([]);
+  const [titleItem, setTitle] = useState({
+    label: "Golf Graphs",
+    items: allItems
+  });
+  const [currentItems, setCurrentItems] = useState(allItems);
+
+  function backActionHelper() {
+    if (previousItemArray.length != 0) {
+      goBackXItems(previousItemArray.length-1);
+      return true;
+    }
+    
+    Alert.alert('Hold on!', 'Are you sure you want to go back?', [
+      {
+        text: 'Cancel',
+        onPress: () => null,
+        style: 'cancel',
+      },
+      {text: 'YES', onPress: () => BackHandler.exitApp()},
+    ]);
+    return true;
   };
+  
+  useEffect(() => {
+    
+    const backAction = () => {
+      return backActionHelper();
+    }
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+    return () => backHandler.remove();
+  });
+
+  function goBackXItems(numItems: Int32) {
+    var pia = [];
+    for (let i = 0; i < numItems; i++) {
+      pia.push(previousItemArray[i] as ItemProps);
+    }
+    setTitle(previousItemArray[numItems]);
+    setCurrentItems((previousItemArray[numItems] as ItemProps).items as [])
+    addPreviousItem(pia as []);
+  }
+
+  function addToPreviousItemArray(item: ItemProps) {
+    var pia = [];
+    for (let i = 0; i < previousItemArray.length; i++) {
+      pia.push(previousItemArray[i]);
+    }
+    pia.push(titleItem as any);
+    setTitle(item as any);
+    addPreviousItem(pia as []);
+  }
+
 
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
+    <SafeAreaView style={{backgroundColor: false ? "black" : "lightgrey"}}>
+      <PageHeader title={titleItem as any} previousItems={previousItemArray} onPressFnc={goBackXItems}>
+
+      </PageHeader>
+      <ScrollView>
+        {currentItems.map((item) => <ItemComp label={item.label} 
+          key={item.label}
+          typeOfItem={item.typeOfItem}
+          items={item.items as []}
+          fncs={{
+            "titleOnPressFnc": addToPreviousItemArray,
+            "currentItemsOnPressFnc":setCurrentItems
+          }}></ItemComp>)}
       </ScrollView>
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
 
 export default App;
