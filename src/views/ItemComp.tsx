@@ -1,16 +1,18 @@
 import {
     useState,
-    useContext
+    useContext,
+    createContext
     } from 'react';
 import {
     View,
     Text,
     } from 'react-native';
-import type {PropsWithChildren} from 'react';
+import type {Context, PropsWithChildren} from 'react';
 import { ItemWithMenu } from './ItemWithMenu';
 import { ItemWithExpansion } from './ItemWithExpansion';
 import { ItemInlineInput } from './ItemInlineInput';
 import styles from "../styles/itemStyles"; 
+import { DataContextType } from '../../App';
 /*
     Types of items:
     "exp": expansion
@@ -28,24 +30,44 @@ type ItemProps = PropsWithChildren<{
     label: string,
     items: ItemProps[],
     typeOfItem: string,
+    context: Context<DataContextType>,
     fncs: any
 }>;
 
-export function ItemComp({label, items, typeOfItem, fncs}: ItemProps): React.JSX.Element {
+export function ItemComp({label, items, typeOfItem, fncs, context}: ItemProps): React.JSX.Element {
+    const {data, setData} = useContext(context);
+    // console.log(data);
+    let item = <View></View>;
     if (typeOfItem == "exp") {
-        return (<ItemWithExpansion key={label} label={label} items={items} typeOfItem={typeOfItem} fncs={fncs}></ItemWithExpansion>
-        );
+        item = (<ItemWithExpansion key={label} label={label} items={items} typeOfItem={typeOfItem} fncs={fncs} context={context}></ItemWithExpansion>);
     } else if (typeOfItem == "inlineInput") {
-        return (
-            
-            <ItemInlineInput label={label} fncs={fncs}></ItemInlineInput>
-        );
+        const itemData = fncs.getActualData(label);
+        const setItemData = (val: string) => {
+            // data[label] = val;
+            setData(label, val);
+        }
+        item = (<ItemInlineInput label={label} itemData={itemData} setItemData={setItemData} fncs={fncs}></ItemInlineInput>);
     } else {
-        return (
-            
-        <ItemWithMenu key={label} label={label} items={items} typeOfItem={typeOfItem} fncs={fncs}></ItemWithMenu>
-        );
+        item = (<ItemWithMenu key={label} label={label} items={items} typeOfItem={typeOfItem} fncs={fncs}></ItemWithMenu>);
+        // if (data[label] != null) {
+        //     console.log("yes");
+        //     const [itemMenuData, itemMenuSetData] = useState(data[label]);
+        //     const DataContext = createContext({} as DataContextType);
+        //     item = (
+        //         <DataContext.Provider
+        //             value={{
+        //                 data: data[label],
+        //                 setData: (val: string) => {
+        //                     itemMenuSetData(val);
+        //                     data[label] = itemMenuData;
+        //                     setData(data);
+        //                     console.log("woot")
+        //                 }
+        //             }}>{item}</DataContext.Provider>
+        //     );
+        // }
     }
+    return item;
 }
 
 export type { ItemProps };

@@ -5,21 +5,23 @@ import {
     Text,
     View,
     } from 'react-native';
-import type {PropsWithChildren} from 'react';
+import type {Context, PropsWithChildren} from 'react';
 import styles from "../styles/itemStyles"; 
 import { ItemComp, ItemProps } from './ItemComp';
+import { DataContextType } from '../../App';
 
 export type ItemWithExpansionProps = PropsWithChildren<{
     label: string,
     items: ItemProps[],
     typeOfItem: string,
+    context: Context<DataContextType>,
     fncs: {
         titleOnPressFnc: (item: ItemProps) => void,
         currentItemsOnPressFnc: (items: ItemProps[]) => void
     }
 }>;
 
-export function ItemWithExpansion({label, items, fncs}: ItemWithExpansionProps): React.JSX.Element {
+export function ItemWithExpansion({label, items, fncs, context}: ItemWithExpansionProps): React.JSX.Element {
 
     const [expansionItems, toggleExpansion] = useState([] as ItemProps[]);
 
@@ -42,7 +44,7 @@ export function ItemWithExpansion({label, items, fncs}: ItemWithExpansionProps):
         <View style={{marginLeft: 10}}>
         {expansionItems.map((item) => { return (
             <ItemComp key={item.label} label={item.label} items={item.items} typeOfItem={item.typeOfItem}
-            fncs={fncs}></ItemComp>
+            fncs={fncs} context={context}></ItemComp>
         );})}</View>
         </View>
     );
