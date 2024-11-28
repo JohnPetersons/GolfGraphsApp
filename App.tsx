@@ -109,35 +109,59 @@ function App(): React.JSX.Element {
     setDataPath(labelArray);
   }
 
-  function setActualData(dataObj: any, dataKey: any, dataVal: any, iStart: any) {
-    let currentData = dataObj as any;
-    if (iStart < dataPath.length) {
-      for (let i = iStart; i < dataPath.length; i++) {
-        Object.entries(data).forEach((key, val) => {
-          console.log(key);
-          if (key[0] == dataPath[i]) {
-            currentData[key[0]] = setActualData(key[1], dataKey, dataVal, i + 1);
-            i = dataPath.length;
-          }
-        });
-      } 
-    } else {
-      currentData[dataKey] = dataVal;
-      return currentData;
-    }
-    if (iStart == 0) {
-      setData(currentData);
-    }
+  // function setActualData(dataObj: any, dataKey: any, dataVal: any, iStart: any) {
+  //   let currentData = dataObj as any;
+  //   if (iStart < dataPath.length) {
+  //     for (let i = iStart; i < dataPath.length; i++) {
+  //       if (Object.keys(data).includes(dataPath[i])) {
+  //         currentData[dataPath[i]] = setActualData(currentData[dataPath[i]], dataKey, dataVal, i + 1);
+  //         break;
+  //         // i = dataPath.length;
+  //       }
+  //       // Object.entries(data).forEach((key, val) => {
+  //       //   if (key[0] == dataPath[i]) {
+  //       //     currentData[key[0]] = setActualData(key[1], dataKey, dataVal, i + 1);
+  //       //     i = dataPath.length;
+  //       //   }
+  //       // });
+  //     } 
+  //   } else {
+  //     currentData[dataKey] = dataVal;
+  //     return currentData;
+  //   }
+  //   if (iStart == 0) {
+  //     setData(currentData);
+  //   }
+  // }
+
+  function setActualData(dataKey: any, dataVal: any) {
+    let currentData = data as any;
+    for (let i = 0; i < dataPath.length; i++) {
+      if (Object.keys(currentData).includes(dataPath[i])) {
+        currentData = currentData[dataPath[i]];
+      }
+      // Object.entries(data).forEach((key, val) => {
+      //   if (key[0] == dataPath[i]) {
+      //     currentData = key[1];
+      //   }
+      // });
+    } 
+    currentData[dataKey] = dataVal;
+    setData(data);
+    // return currentData[dataKey];
   }
 
   function getActualData(dataKey: any) {
     let currentData = data as any;
     for (let i = 0; i < dataPath.length; i++) {
-      Object.entries(data).forEach((key, val) => {
-        if (key[0] == dataPath[i]) {
-          currentData = key[1];
-        }
-      });
+      if (Object.keys(currentData).includes(dataPath[i])) {
+        currentData = currentData[dataPath[i]];
+      }
+      // Object.entries(data).forEach((key, val) => {
+      //   if (key[0] == dataPath[i]) {
+      //     currentData = key[1];
+      //   }
+      // });
     } 
     return currentData[dataKey];
   }
@@ -147,7 +171,7 @@ function App(): React.JSX.Element {
     <DataContext.Provider 
       value={{
         data,
-        setData: (key: any, val: any) => setActualData(data, key, val, 0)
+        setData: (key: any, val: any) => setActualData(key, val)
       }}>
       <SafeAreaView style={{backgroundColor: false ? "black" : "lightgrey"}}>
         <PageHeader title={titleItem as any} previousItems={previousItemArray} onPressFnc={goBackXItems}>
