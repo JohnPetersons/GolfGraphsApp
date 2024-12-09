@@ -7,14 +7,22 @@ const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
   
 const styles = StyleSheet.create({
+  generalContainer: {
+    backgroundColor: "lightgrey"
+  },
   headerContainer: {
     width: windowWidth,
+    minHeight: 100,
+    justifyContent: "flex-end",
+    backgroundColor: "black"
   },
   headerItem: {
     width: windowWidth - 10,
+    borderRadius: 5,
     fontSize: 25,
     margin: 5,
-    padding: 5
+    padding: 5,
+    color: "white"
   },
   previousItem: {
     flex: 0,
@@ -24,7 +32,7 @@ const styles = StyleSheet.create({
     margin: 5,
     padding: 5,
     borderStyle: 'solid',
-    borderRadius: 2.5,
+    borderRadius: 5,
     borderColor: 'white',
     backgroundColor: 'white',
     overflow: 'hidden',
@@ -53,7 +61,18 @@ const styles = StyleSheet.create({
     maxWidth: (2 * windowWidth / 5) - 5,
     fontSize: 17,
     margin: 2.5,
-    backgroundColor: "white"
+    backgroundColor: "white",
+    borderRadius: 5
+  },
+  svgContainer: {
+    backgroundColor: "white",
+    width: windowWidth - 50,
+    height: 200,
+    marginTop: 5,
+    marginBottom: 5,
+    borderRadius: 5,
+    marginLeft: 25,
+    marginRight: 25
   }
 });
 

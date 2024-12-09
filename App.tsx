@@ -25,6 +25,8 @@ import { Int32 } from 'react-native/Libraries/Types/CodegenTypes';
 import { ItemComp, ItemProps } from './src/views/ItemComp';
 import { PageHeader } from './src/views/PageHeader';
 import { menus } from './src/config/menuStructure';
+import { ScatterPlotGraph } from './src/views/ScatterPlotGraph';
+import styles from './src/styles/itemStyles';
 
 export type DataContextType = {
   data: any,
@@ -42,7 +44,17 @@ function App(): React.JSX.Element {
       "test input 3": "456"
     },
     "Item 4": "test",
-    "Test Input abc": "Woot"
+    "Test Input abc": "Woot",
+    "graphData": {
+      0: {
+        x: "0%",
+        y: "20%"
+      },
+      1: {
+        x: "100%",
+        y: "75%"
+      }
+    }
   }
 
   let loadedData = "";
@@ -107,8 +119,9 @@ function App(): React.JSX.Element {
     var labelArray: string | SetStateAction<any[]> = [];
     for (let i = 0; i < numItems; i++) {
       pia.push(previousItemArray[i] as ItemProps);
-      labelArray.concat((previousItemArray[i] as any).fncs.getDataKey != null? (previousItemArray[i] as any).fncs.getDataKey(): null);
-      // labelArray.push((previousItemArray[i] as ItemProps).label);
+      if ((previousItemArray[i] as any).fncs != null) {
+        labelArray.concat((previousItemArray[i] as any).fncs.getDataKey != null? (previousItemArray[i] as any).fncs.getDataKey(): null);
+      }
     }
     setTitle(previousItemArray[numItems]);
     setCurrentItems((previousItemArray[numItems] as ItemProps).items as [])
@@ -121,8 +134,9 @@ function App(): React.JSX.Element {
     var labelArray = dataPath;
     for (let i = 0; i < previousItemArray.length; i++) {
       pia.push(previousItemArray[i]);
-      labelArray.concat((previousItemArray[i] as any).fncs.getDataKey != null? (previousItemArray[i] as any).fncs.getDataKey(): null);
-      // labelArray.push((previousItemArray[i] as ItemProps).label);
+      if ((previousItemArray[i] as any).fncs != null) {
+        labelArray.concat((previousItemArray[i] as any).fncs.getDataKey != null? (previousItemArray[i] as any).fncs.getDataKey(): null);
+      }
     }
     labelArray.push(item.label);
     pia.push(titleItem as any);
@@ -149,7 +163,6 @@ function App(): React.JSX.Element {
   }
 
   function getActualData(dataKey: any) {
-    console.log(data);
     let currentData = data as any;
     for (let i = 0; i < dataPath.length; i++) {
       if (Object.keys(currentData).includes(dataPath[i])) {
@@ -182,12 +195,13 @@ function App(): React.JSX.Element {
         data,
         setData: (key: any, val: any) => setActualData(key, val)
       }}>
-      <SafeAreaView style={{backgroundColor: false ? "black" : "lightgrey"}}>
+      <SafeAreaView style={{backgroundColor: "black", height: "100%"}}>
         <View style={{height: 50}}></View>
         <PageHeader title={titleItem as any} previousItems={previousItemArray} onPressFnc={goBackXItems}>
 
         </PageHeader>
-        <ScrollView>
+        <ScatterPlotGraph label="graph" data={(data as any).graphData}></ScatterPlotGraph>
+        <ScrollView style={styles.generalContainer}>
           {currentItems.map((item: any) => <ItemComp label={item.label} 
             key={item.label}
             typeOfItem={item.typeOfItem}
