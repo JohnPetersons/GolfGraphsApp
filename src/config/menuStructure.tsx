@@ -1,5 +1,3 @@
-import { ItemProps } from "../views/ItemComp";
-
 export const menus = [{
     label: "Item 1",
     typeOfItem: "menu",
@@ -54,7 +52,7 @@ export const menus = [{
         typeOfItem: "inlineInput",
         items: [],
         fncs: {
-            getDataKey: () => ["Test Input abc"]
+            getDataKey: () => ["TestInputabc"]
             // getDataFnc: () => data,
             // setDataFnc: setData
         }
@@ -67,7 +65,7 @@ export const menus = [{
         typeOfItem: "inlineInput",
         items: [],
         fncs: {
-            getDataKey: () => ["test input 2"]
+            getDataKey: () => ["testinput2"]
             // getDataFnc: () => data,
             // setDataFnc: setData
         }
@@ -76,13 +74,13 @@ export const menus = [{
         typeOfItem: "inlineInput",
         items: [],
         fncs: {
-            getDataKey: () => ["test input 3"]
+            getDataKey: () => ["testinput3"]
             // getDataFnc: () => data,
             // setDataFnc: setData
         }
     }],
     fncs: {
-        getDataKey: () => ["Items List"]
+        getDataKey: () => ["ItemsList"]
 
     }
 },{
@@ -90,7 +88,7 @@ export const menus = [{
     typeOfItem: "inlineInput",
     items: [],
     fncs: {
-        getDataKey: () => ["Item 4"]
+        getDataKey: () => ["Item4"]
         // getDataFnc: () => data,
         // setDataFnc: setData
     }

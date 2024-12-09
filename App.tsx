@@ -39,12 +39,12 @@ function App(): React.JSX.Element {
 
   const itemData = {
     "datasetName": "testDataSet",
-    "Items List": {
-      "test input 2": "123",
-      "test input 3": "456"
+    "ItemsList": {
+      "testinput2": "123",
+      "testinput3": "456"
     },
-    "Item 4": "test",
-    "Test Input abc": "Woot",
+    "Item4": "test",
+    "TestInputabc": "Woot",
     "graphData": {
       0: {
         x: "0%",
@@ -56,7 +56,6 @@ function App(): React.JSX.Element {
       }
     }
   }
-
   let loadedData = "";
 
   const [loaded, setLoaded] = useState(false);
@@ -66,23 +65,25 @@ function App(): React.JSX.Element {
       AsyncStorage.getItem("testDataSet" as string).then((val) => {
         setLoaded(true);
         // setData(itemData as any); // uncomment to reset on load
-        setData(val != null?JSON.parse(val as any):itemData);
+        const parsedVal = val != null?JSON.parse(val as any):itemData;
+        setData(parsedVal);
       });
     }
   } catch (error) {
     console.log(error);
   }
 
-  const allItems = menus;
-
   const [data, setData] = useState(loadedData);
+
+  
+
   const [dataPath, setDataPath] = useState([] as any[]);
   const [previousItemArray, addPreviousItem] = useState([]);
   const [titleItem, setTitle] = useState({
     label: "Golf Graphs",
-    items: allItems
+    items: menus
   });
-  const [currentItems, setCurrentItems] = useState(allItems);
+  const [currentItems, setCurrentItems] = useState(menus);
 
   function backActionHelper() {
     if (previousItemArray.length != 0) {
@@ -134,11 +135,15 @@ function App(): React.JSX.Element {
     var labelArray = dataPath;
     for (let i = 0; i < previousItemArray.length; i++) {
       pia.push(previousItemArray[i]);
-      if ((previousItemArray[i] as any).fncs != null) {
-        labelArray.concat((previousItemArray[i] as any).fncs.getDataKey != null? (previousItemArray[i] as any).fncs.getDataKey(): null);
+      // if ((previousItemArray[i] as any).fncs != null) {
+      //   labelArray.concat((previousItemArray[i] as any).fncs.getDataKey != null? (previousItemArray[i] as any).fncs.getDataKey(): null);
+      // }
+    }
+    if (item.fncs.getDataKey != null) {
+      for(const dataPathItem in item.fncs.getDataKey()) {
+        labelArray.push(item.fncs.getDataKey()[dataPathItem]);
       }
     }
-    labelArray.push(item.label);
     pia.push(titleItem as any);
     setTitle(item as any);
     addPreviousItem(pia as []);
@@ -200,7 +205,7 @@ function App(): React.JSX.Element {
         <PageHeader title={titleItem as any} previousItems={previousItemArray} onPressFnc={goBackXItems}>
 
         </PageHeader>
-        <ScatterPlotGraph label="graph" data={(data as any).graphData}></ScatterPlotGraph>
+        <ScatterPlotGraph label="Graph" data={(data as any).graphData}></ScatterPlotGraph>
         <ScrollView style={styles.generalContainer}>
           {currentItems.map((item: any) => <ItemComp label={item.label} 
             key={item.label}

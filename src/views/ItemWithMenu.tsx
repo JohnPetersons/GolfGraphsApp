@@ -21,7 +21,8 @@ export function ItemWithMenu ({label, items, fncs}: ItemWithMenuProps): React.JS
     function onPressItemWithMenu() {
         fncs.titleOnPressFnc({
         label: label,
-        items: items
+        items: items,
+        fncs: fncs
         } as ItemProps);
         fncs.currentItemsOnPressFnc(items);
     }
