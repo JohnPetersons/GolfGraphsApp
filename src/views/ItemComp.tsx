@@ -45,7 +45,7 @@ export function ItemComp({label, items, typeOfItem, fncs, context}: ItemProps): 
         const itemData = fncs.getActualData(dataKey);
         const setItemData = (val: string) => {
             // data[label] = val;
-            //setData(dataKey, val);
+            setData(dataKey, val);
         }
         item = (<ItemInlineInput label={label} itemData={itemData} setItemData={setItemData} fncs={fncs}></ItemInlineInput>);
     } else {

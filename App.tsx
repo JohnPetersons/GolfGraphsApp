@@ -10,7 +10,8 @@ import {
   useState,
   useEffect,
   useContext,
-  createContext
+  createContext,
+  SetStateAction
  } from 'react';
 import {
   SafeAreaView,
@@ -52,6 +53,7 @@ function App(): React.JSX.Element {
     if (!loaded) {
       AsyncStorage.getItem("testDataSet" as string).then((val) => {
         setLoaded(true);
+        // setData(itemData as any); // uncomment to reset on load
         setData(val != null?JSON.parse(val as any):itemData);
       });
     }
@@ -102,10 +104,11 @@ function App(): React.JSX.Element {
 
   function goBackXItems(numItems: Int32) {
     var pia = [];
-    var labelArray = [];
+    var labelArray: string | SetStateAction<any[]> = [];
     for (let i = 0; i < numItems; i++) {
       pia.push(previousItemArray[i] as ItemProps);
-      labelArray.push((previousItemArray[i] as ItemProps).label);
+      labelArray.concat((previousItemArray[i] as any).fncs.getDataKey != null? (previousItemArray[i] as any).fncs.getDataKey(): null);
+      // labelArray.push((previousItemArray[i] as ItemProps).label);
     }
     setTitle(previousItemArray[numItems]);
     setCurrentItems((previousItemArray[numItems] as ItemProps).items as [])
@@ -118,7 +121,8 @@ function App(): React.JSX.Element {
     var labelArray = dataPath;
     for (let i = 0; i < previousItemArray.length; i++) {
       pia.push(previousItemArray[i]);
-      labelArray.push((previousItemArray[i] as ItemProps).label);
+      labelArray.concat((previousItemArray[i] as any).fncs.getDataKey != null? (previousItemArray[i] as any).fncs.getDataKey(): null);
+      // labelArray.push((previousItemArray[i] as ItemProps).label);
     }
     labelArray.push(item.label);
     pia.push(titleItem as any);
@@ -129,6 +133,11 @@ function App(): React.JSX.Element {
 
   function setActualData(dataKey: any, dataVal: any) {
     let currentData = data as any;
+    for (let i = 0; i < dataPath.length; i++) {
+      if (Object.keys(currentData).includes(dataPath[i])) {
+        currentData = currentData[dataPath[i]];
+      }
+    }
     for (let i = 0; i < dataKey.length - 1; i++) {
       if (Object.keys(currentData).includes(dataKey[i])) {
         currentData = currentData[dataKey[i]];
@@ -140,8 +149,13 @@ function App(): React.JSX.Element {
   }
 
   function getActualData(dataKey: any) {
-    console.log(dataKey);
+    console.log(data);
     let currentData = data as any;
+    for (let i = 0; i < dataPath.length; i++) {
+      if (Object.keys(currentData).includes(dataPath[i])) {
+        currentData = currentData[dataPath[i]];
+      }
+    }
     for (let i = 0; i < dataKey.length - 1; i++) {
       if (Object.keys(currentData).includes(dataKey[i])) {
         currentData = currentData[dataKey[i]];
@@ -169,7 +183,7 @@ function App(): React.JSX.Element {
         setData: (key: any, val: any) => setActualData(key, val)
       }}>
       <SafeAreaView style={{backgroundColor: false ? "black" : "lightgrey"}}>
-        <View style={{height: 100}}></View>
+        <View style={{height: 50}}></View>
         <PageHeader title={titleItem as any} previousItems={previousItemArray} onPressFnc={goBackXItems}>
 
         </PageHeader>
@@ -183,7 +197,7 @@ function App(): React.JSX.Element {
               "titleOnPressFnc": addToPreviousItemArray,
               "currentItemsOnPressFnc":setCurrentItems,
               "getActualData": getActualData,
-              "getDataKey": item.fncs.getDataKey
+              "getDataKey": (item.fncs.getDataKey != null? item.fncs.getDataKey: () => [])
             }}></ItemComp>)}
         </ScrollView>
       </SafeAreaView>
