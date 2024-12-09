@@ -16,8 +16,10 @@ import {
   SafeAreaView,
   ScrollView,
   Alert,
-  BackHandler 
+  BackHandler,
+  View,
 } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Int32 } from 'react-native/Libraries/Types/CodegenTypes';
 import { ItemComp, ItemProps } from './src/views/ItemComp';
 import { PageHeader } from './src/views/PageHeader';
@@ -33,17 +35,33 @@ const DataContext = createContext({} as DataContextType);
 function App(): React.JSX.Element { 
 
   const itemData = {
+    "datasetName": "testDataSet",
     "Items List": {
       "test input 2": "123",
       "test input 3": "456"
     },
     "Item 4": "test",
-    "Test Input": "Woot"
+    "Test Input abc": "Woot"
+  }
+
+  let loadedData = "";
+
+  const [loaded, setLoaded] = useState(false);
+
+  try {
+    if (!loaded) {
+      AsyncStorage.getItem("testDataSet" as string).then((val) => {
+        setLoaded(true);
+        setData(val != null?JSON.parse(val as any):itemData);
+      });
+    }
+  } catch (error) {
+    console.log(error);
   }
 
   const allItems = menus;
 
-  const [data, setData] = useState(itemData);
+  const [data, setData] = useState(loadedData);
   const [dataPath, setDataPath] = useState([] as any[]);
   const [previousItemArray, addPreviousItem] = useState([]);
   const [titleItem, setTitle] = useState({
@@ -109,61 +127,38 @@ function App(): React.JSX.Element {
     setDataPath(labelArray);
   }
 
-  // function setActualData(dataObj: any, dataKey: any, dataVal: any, iStart: any) {
-  //   let currentData = dataObj as any;
-  //   if (iStart < dataPath.length) {
-  //     for (let i = iStart; i < dataPath.length; i++) {
-  //       if (Object.keys(data).includes(dataPath[i])) {
-  //         currentData[dataPath[i]] = setActualData(currentData[dataPath[i]], dataKey, dataVal, i + 1);
-  //         break;
-  //         // i = dataPath.length;
-  //       }
-  //       // Object.entries(data).forEach((key, val) => {
-  //       //   if (key[0] == dataPath[i]) {
-  //       //     currentData[key[0]] = setActualData(key[1], dataKey, dataVal, i + 1);
-  //       //     i = dataPath.length;
-  //       //   }
-  //       // });
-  //     } 
-  //   } else {
-  //     currentData[dataKey] = dataVal;
-  //     return currentData;
-  //   }
-  //   if (iStart == 0) {
-  //     setData(currentData);
-  //   }
-  // }
-
   function setActualData(dataKey: any, dataVal: any) {
     let currentData = data as any;
-    for (let i = 0; i < dataPath.length; i++) {
-      if (Object.keys(currentData).includes(dataPath[i])) {
-        currentData = currentData[dataPath[i]];
+    for (let i = 0; i < dataKey.length - 1; i++) {
+      if (Object.keys(currentData).includes(dataKey[i])) {
+        currentData = currentData[dataKey[i]];
       }
-      // Object.entries(data).forEach((key, val) => {
-      //   if (key[0] == dataPath[i]) {
-      //     currentData = key[1];
-      //   }
-      // });
     } 
-    currentData[dataKey] = dataVal;
+    currentData[dataKey[dataKey.length - 1]] = dataVal;
     setData(data);
-    // return currentData[dataKey];
+    saveData();
   }
 
   function getActualData(dataKey: any) {
+    console.log(dataKey);
     let currentData = data as any;
-    for (let i = 0; i < dataPath.length; i++) {
-      if (Object.keys(currentData).includes(dataPath[i])) {
-        currentData = currentData[dataPath[i]];
+    for (let i = 0; i < dataKey.length - 1; i++) {
+      if (Object.keys(currentData).includes(dataKey[i])) {
+        currentData = currentData[dataKey[i]];
       }
-      // Object.entries(data).forEach((key, val) => {
-      //   if (key[0] == dataPath[i]) {
-      //     currentData = key[1];
-      //   }
-      // });
     } 
-    return currentData[dataKey];
+    return currentData[dataKey[dataKey.length - 1]];
+  }
+
+  async function saveData() {
+    try {
+      await AsyncStorage.setItem(
+        "testDataSet",
+        JSON.stringify(data)
+      );
+    } catch (error) {
+      console.log(error);
+    }
   }
 
 
@@ -174,11 +169,12 @@ function App(): React.JSX.Element {
         setData: (key: any, val: any) => setActualData(key, val)
       }}>
       <SafeAreaView style={{backgroundColor: false ? "black" : "lightgrey"}}>
+        <View style={{height: 100}}></View>
         <PageHeader title={titleItem as any} previousItems={previousItemArray} onPressFnc={goBackXItems}>
 
         </PageHeader>
         <ScrollView>
-          {currentItems.map((item) => <ItemComp label={item.label} 
+          {currentItems.map((item: any) => <ItemComp label={item.label} 
             key={item.label}
             typeOfItem={item.typeOfItem}
             items={item.items as []}
@@ -186,7 +182,8 @@ function App(): React.JSX.Element {
             fncs={{
               "titleOnPressFnc": addToPreviousItemArray,
               "currentItemsOnPressFnc":setCurrentItems,
-              "getActualData": getActualData
+              "getActualData": getActualData,
+              "getDataKey": item.fncs.getDataKey
             }}></ItemComp>)}
         </ScrollView>
       </SafeAreaView>

@@ -54,6 +54,7 @@ export const menus = [{
         typeOfItem: "inlineInput",
         items: [],
         fncs: {
+            getDataKey: () => ["Test Input abc"]
             // getDataFnc: () => data,
             // setDataFnc: setData
         }
@@ -66,6 +67,7 @@ export const menus = [{
         typeOfItem: "inlineInput",
         items: [],
         fncs: {
+            getDataKey: () => ["Items List", "test input 2"]
             // getDataFnc: () => data,
             // setDataFnc: setData
         }
@@ -74,6 +76,7 @@ export const menus = [{
         typeOfItem: "inlineInput",
         items: [],
         fncs: {
+            getDataKey: () => ["Items List", "test input 3"]
             // getDataFnc: () => data,
             // setDataFnc: setData
         }
@@ -84,6 +87,7 @@ export const menus = [{
     typeOfItem: "inlineInput",
     items: [],
     fncs: {
+        getDataKey: () => ["Item 4"]
         // getDataFnc: () => data,
         // setDataFnc: setData
     }

@@ -7,3 +7,5 @@ hw.gpu.mode=off
 don't accidentally comment out below from App.tsx
     export default App
 the error message isn't great at telling you what the problem is
+
+asyncstorage needs java 17

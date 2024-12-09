@@ -41,10 +41,11 @@ export function ItemComp({label, items, typeOfItem, fncs, context}: ItemProps): 
     if (typeOfItem == "exp") {
         item = (<ItemWithExpansion key={label} label={label} items={items} typeOfItem={typeOfItem} fncs={fncs} context={context}></ItemWithExpansion>);
     } else if (typeOfItem == "inlineInput") {
-        const itemData = fncs.getActualData(label);
+        const dataKey = fncs.getDataKey();
+        const itemData = fncs.getActualData(dataKey);
         const setItemData = (val: string) => {
             // data[label] = val;
-            setData(label, val);
+            //setData(dataKey, val);
         }
         item = (<ItemInlineInput label={label} itemData={itemData} setItemData={setItemData} fncs={fncs}></ItemInlineInput>);
     } else {
