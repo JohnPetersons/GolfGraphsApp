@@ -45,6 +45,14 @@ function App(): React.JSX.Element {
     },
     "Item4": "test",
     "TestInputabc": "Woot",
+    "ItemListTest": {
+      "0": {
+        "testListInput": "0"
+      },
+      "1": {
+        "testListInput": "1"
+      }
+    },
     "graphData": {
       0: {
         x: "0%",
@@ -120,9 +128,7 @@ function App(): React.JSX.Element {
     var labelArray: string | SetStateAction<any[]> = [];
     for (let i = 0; i < numItems; i++) {
       pia.push(previousItemArray[i] as ItemProps);
-      if ((previousItemArray[i] as any).fncs != null) {
-        labelArray.concat((previousItemArray[i] as any).fncs.getDataKey != null? (previousItemArray[i] as any).fncs.getDataKey(): null);
-      }
+      labelArray.push((previousItemArray[i] as any).dataKey != null? (previousItemArray[i] as any).fncs.dataKey: null);
     }
     setTitle(previousItemArray[numItems]);
     setCurrentItems((previousItemArray[numItems] as ItemProps).items as [])
@@ -135,13 +141,10 @@ function App(): React.JSX.Element {
     var labelArray = dataPath;
     for (let i = 0; i < previousItemArray.length; i++) {
       pia.push(previousItemArray[i]);
-      // if ((previousItemArray[i] as any).fncs != null) {
-      //   labelArray.concat((previousItemArray[i] as any).fncs.getDataKey != null? (previousItemArray[i] as any).fncs.getDataKey(): null);
-      // }
     }
-    if (item.fncs.getDataKey != null) {
-      for(const dataPathItem in item.fncs.getDataKey()) {
-        labelArray.push(item.fncs.getDataKey()[dataPathItem]);
+    if (item.dataKey != null) {
+      for (let i = 0; i < item.dataKey.length; i++) {
+        labelArray.push(item.dataKey[i]);
       }
     }
     pia.push(titleItem as any);
@@ -161,7 +164,7 @@ function App(): React.JSX.Element {
       if (Object.keys(currentData).includes(dataKey[i])) {
         currentData = currentData[dataKey[i]];
       }
-    } 
+    }
     currentData[dataKey[dataKey.length - 1]] = dataVal;
     setData(data);
     saveData();
@@ -205,18 +208,18 @@ function App(): React.JSX.Element {
         <PageHeader title={titleItem as any} previousItems={previousItemArray} onPressFnc={goBackXItems}>
 
         </PageHeader>
-        <ScatterPlotGraph label="Graph" data={(data as any).graphData}></ScatterPlotGraph>
         <ScrollView style={styles.generalContainer}>
+        <ScatterPlotGraph label="Graph" data={(data as any).graphData}></ScatterPlotGraph>
           {currentItems.map((item: any) => <ItemComp label={item.label} 
             key={item.label}
             typeOfItem={item.typeOfItem}
             items={item.items as []}
             context={DataContext}
+            dataKey={item.dataKey}
             fncs={{
               "titleOnPressFnc": addToPreviousItemArray,
               "currentItemsOnPressFnc":setCurrentItems,
-              "getActualData": getActualData,
-              "getDataKey": (item.fncs.getDataKey != null? item.fncs.getDataKey: () => [])
+              "getActualData": getActualData
             }}></ItemComp>)}
         </ScrollView>
       </SafeAreaView>

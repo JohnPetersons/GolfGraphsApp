@@ -10,18 +10,20 @@ export type ItemWithMenuProps = PropsWithChildren<{
     label: string,
     items: ItemProps[],
     typeOfItem: string,
+    dataKey: string,
     fncs: {
         titleOnPressFnc: (item: ItemProps) => void,
         currentItemsOnPressFnc: (items: ItemProps[]) => void
     }
 }>;
 
-export function ItemWithMenu ({label, items, fncs}: ItemWithMenuProps): React.JSX.Element {
+export function ItemWithMenu ({label, items, dataKey, fncs}: ItemWithMenuProps): React.JSX.Element {
 
     function onPressItemWithMenu() {
         fncs.titleOnPressFnc({
         label: label,
         items: items,
+        dataKey: dataKey,
         fncs: fncs
         } as ItemProps);
         fncs.currentItemsOnPressFnc(items);

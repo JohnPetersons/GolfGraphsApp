@@ -51,8 +51,9 @@ export const menus = [{
         label: "Test Input",
         typeOfItem: "inlineInput",
         items: [],
+        dataKey: ["TestInputabc"],
         fncs: {
-            getDataKey: () => ["TestInputabc"]
+            // getDataKey: () => ["TestInputabc"]
             // getDataFnc: () => data,
             // setDataFnc: setData
         }
@@ -64,8 +65,9 @@ export const menus = [{
         label: "test input 2",
         typeOfItem: "inlineInput",
         items: [],
+        dataKey: ["testinput2"],
         fncs: {
-            getDataKey: () => ["testinput2"]
+            // getDataKey: () => ["testinput2"]
             // getDataFnc: () => data,
             // setDataFnc: setData
         }
@@ -73,23 +75,27 @@ export const menus = [{
         label: "test input 3",
         typeOfItem: "inlineInput",
         items: [],
+        dataKey: ["testinput3"],
         fncs: {
-            getDataKey: () => ["testinput3"]
+            // getDataKey: () => ["testinput3"]
             // getDataFnc: () => data,
             // setDataFnc: setData
         }
     }],
-    fncs: {
-        getDataKey: () => ["ItemsList"]
-
-    }
+    dataKey: "ItemsList"
 },{
     label: "Item 4",
     typeOfItem: "inlineInput",
     items: [],
-    fncs: {
-        getDataKey: () => ["Item4"]
-        // getDataFnc: () => data,
-        // setDataFnc: setData
-    }
+    dataKey: ["Item4"]
+},{
+    label: "List Item Test",
+    typeOfItem: "list",
+    items: [{
+        label: "List Item Inner Item",
+        typeOfItem: "inlineInput",
+        items:[],
+        dataKey: ["testListInput"]
+    }],
+    dataKey: ["ItemListTest"]
 }];

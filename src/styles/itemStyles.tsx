@@ -8,7 +8,8 @@ const windowHeight = Dimensions.get('window').height;
   
 const styles = StyleSheet.create({
   generalContainer: {
-    backgroundColor: "lightgrey"
+    backgroundColor: "lightgrey",
+    borderRadius: 10
   },
   headerContainer: {
     width: windowWidth,

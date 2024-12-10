@@ -15,13 +15,14 @@ export type ItemWithExpansionProps = PropsWithChildren<{
     items: ItemProps[],
     typeOfItem: string,
     context: Context<DataContextType>,
+    dataKey: string,
     fncs: {
         titleOnPressFnc: (item: ItemProps) => void,
         currentItemsOnPressFnc: (items: ItemProps[]) => void
     }
 }>;
 
-export function ItemWithExpansion({label, items, fncs, context}: ItemWithExpansionProps): React.JSX.Element {
+export function ItemWithExpansion({label, items, dataKey, fncs, context}: ItemWithExpansionProps): React.JSX.Element {
 
     const [expansionItems, toggleExpansion] = useState([] as ItemProps[]);
 
@@ -44,7 +45,7 @@ export function ItemWithExpansion({label, items, fncs, context}: ItemWithExpansi
         <View style={{marginLeft: 10}}>
         {expansionItems.map((item) => { return (
             <ItemComp key={item.label} label={item.label} items={item.items} typeOfItem={item.typeOfItem}
-            fncs={fncs} context={context}></ItemComp>
+            fncs={fncs} context={context} dataKey={dataKey}></ItemComp>
         );})}</View>
         </View>
     );
