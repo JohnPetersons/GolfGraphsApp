@@ -8,15 +8,8 @@ import {
     TextInput,
     Button,
     } from 'react-native';
-import type {PropsWithChildren} from 'react';
+import { ItemInlineInputProps } from '../config/types';
 import styles from "../styles/itemStyles"; 
-
-export type ItemInlineInputProps = PropsWithChildren<{
-    label: string,
-    itemData: string,
-    setItemData: (val: string) => void,
-    fncs: any
-}>;
 
 export function ItemInlineInput({label, itemData, setItemData, fncs}: ItemInlineInputProps): React.JSX.Element {
     return (

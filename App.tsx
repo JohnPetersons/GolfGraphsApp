@@ -22,16 +22,12 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Int32 } from 'react-native/Libraries/Types/CodegenTypes';
-import { ItemComp, ItemProps } from './src/views/ItemComp';
+import { ItemComp } from './src/views/ItemComp';
 import { PageHeader } from './src/views/PageHeader';
 import { menus } from './src/config/menuStructure';
 import { ScatterPlotGraph } from './src/views/ScatterPlotGraph';
 import styles from './src/styles/itemStyles';
-
-export type DataContextType = {
-  data: any,
-  setData: any
-}
+import { AppDataType, DataContextType, ItemProps, MenuStructureType, TitleItemType } from './src/config/types';
 
 const DataContext = createContext({} as DataContextType);
 
@@ -85,13 +81,13 @@ function App(): React.JSX.Element {
 
   
 
-  const [dataPath, setDataPath] = useState([] as any[]);
+  const [dataPath, setDataPath] = useState([] as string[]);
   const [previousItemArray, addPreviousItem] = useState([]);
   const [titleItem, setTitle] = useState({
     label: "Golf Graphs",
-    items: menus
-  });
-  const [currentItems, setCurrentItems] = useState(menus);
+    items: menus as MenuStructureType[]
+  } as TitleItemType);
+  const [currentItems, setCurrentItems] = useState(menus as MenuStructureType[]);
 
   function backActionHelper() {
     if (previousItemArray.length != 0) {
@@ -125,10 +121,12 @@ function App(): React.JSX.Element {
 
   function goBackXItems(numItems: Int32) {
     var pia = [];
-    var labelArray: string | SetStateAction<any[]> = [];
+    var labelArray: string[] = [];
     for (let i = 0; i < numItems; i++) {
       pia.push(previousItemArray[i] as ItemProps);
-      labelArray.push((previousItemArray[i] as any).dataKey != null? (previousItemArray[i] as any).fncs.dataKey: null);
+      if ((previousItemArray[i] as ItemProps).dataKey != null) {
+        labelArray.concat((previousItemArray[i] as ItemProps).dataKey);
+      }
     }
     setTitle(previousItemArray[numItems]);
     setCurrentItems((previousItemArray[numItems] as ItemProps).items as [])
@@ -147,14 +145,14 @@ function App(): React.JSX.Element {
         labelArray.push(item.dataKey[i]);
       }
     }
-    pia.push(titleItem as any);
-    setTitle(item as any);
+    pia.push(titleItem as TitleItemType);
+    setTitle(item as TitleItemType);
     addPreviousItem(pia as []);
     setDataPath(labelArray);
   }
 
-  function setActualData(dataKey: any, dataVal: any) {
-    let currentData = data as any;
+  function setActualData(dataKey: string[], dataVal: AppDataType) {
+    let currentData = data as AppDataType;
     for (let i = 0; i < dataPath.length; i++) {
       if (Object.keys(currentData).includes(dataPath[i])) {
         currentData = currentData[dataPath[i]];
@@ -170,8 +168,8 @@ function App(): React.JSX.Element {
     saveData();
   }
 
-  function getActualData(dataKey: any) {
-    let currentData = data as any;
+  function getActualData(dataKey: string[]) {
+    let currentData = data as AppDataType;
     for (let i = 0; i < dataPath.length; i++) {
       if (Object.keys(currentData).includes(dataPath[i])) {
         currentData = currentData[dataPath[i]];
@@ -201,16 +199,16 @@ function App(): React.JSX.Element {
     <DataContext.Provider 
       value={{
         data,
-        setData: (key: any, val: any) => setActualData(key, val)
+        setData: (key: string[], val: AppDataType) => setActualData(key, val)
       }}>
       <SafeAreaView style={{backgroundColor: "black", height: "100%"}}>
         <View style={{height: 50}}></View>
-        <PageHeader title={titleItem as any} previousItems={previousItemArray} onPressFnc={goBackXItems}>
+        <PageHeader title={titleItem as TitleItemType} previousItems={previousItemArray} onPressFnc={goBackXItems}>
 
         </PageHeader>
         <ScrollView style={styles.generalContainer}>
-        <ScatterPlotGraph label="Graph" data={(data as any).graphData}></ScatterPlotGraph>
-          {currentItems.map((item: any) => <ItemComp label={item.label} 
+        <ScatterPlotGraph label="Graph" data={(data as AppDataType).graphData}></ScatterPlotGraph>
+          {currentItems.map((item: MenuStructureType) => <ItemComp label={item.label} 
             key={item.label}
             typeOfItem={item.typeOfItem}
             items={item.items as []}

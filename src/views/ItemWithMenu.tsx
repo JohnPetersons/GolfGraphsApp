@@ -3,21 +3,10 @@ import {
     Text,
     View,
     } from 'react-native';
-import { ItemProps } from './ItemComp';
+import { ItemProps } from '../config/types';
 import styles from "../styles/itemStyles"; 
 
-export type ItemWithMenuProps = PropsWithChildren<{
-    label: string,
-    items: ItemProps[],
-    typeOfItem: string,
-    dataKey: string,
-    fncs: {
-        titleOnPressFnc: (item: ItemProps) => void,
-        currentItemsOnPressFnc: (items: ItemProps[]) => void
-    }
-}>;
-
-export function ItemWithMenu ({label, items, dataKey, fncs}: ItemWithMenuProps): React.JSX.Element {
+export function ItemWithMenu ({label, items, dataKey, fncs}: ItemProps): React.JSX.Element {
 
     function onPressItemWithMenu() {
         fncs.titleOnPressFnc({

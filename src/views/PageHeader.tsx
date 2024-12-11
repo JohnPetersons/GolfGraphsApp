@@ -5,13 +5,7 @@ import {
     } from 'react-native';
 import { Int32 } from 'react-native/Libraries/Types/CodegenTypes';
 import styles from "../styles/itemStyles"; 
-import { ItemProps } from '../views/ItemComp';
-
-export type PageHeaderProps = PropsWithChildren<{
-    title: ItemProps,
-    previousItems: ItemProps[],
-    onPressFnc: (numItems: Int32) => void
-}>;
+import { ItemProps, PageHeaderProps } from '../config/types';
 
 export function PageHeader({title, previousItems, onPressFnc}: PageHeaderProps): React.JSX.Element {
 

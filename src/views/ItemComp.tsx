@@ -12,7 +12,7 @@ import { ItemWithMenu } from './ItemWithMenu';
 import { ItemWithExpansion } from './ItemWithExpansion';
 import { ItemInlineInput } from './ItemInlineInput';
 import styles from "../styles/itemStyles"; 
-import { DataContextType } from '../../App';
+import { DataContextType, ItemProps } from '../config/types';
 import { ItemWithList } from './ItemWithList';
 /*
     Types of items:
@@ -26,15 +26,6 @@ import { ItemWithList } from './ItemWithList';
         similar to how expansion shows it
     "list"
 */
-
-type ItemProps = PropsWithChildren<{
-    label: string,
-    items: ItemProps[],
-    typeOfItem: string,
-    dataKey: string,
-    context: Context<DataContextType>,
-    fncs: any
-}>;
 
 export function ItemComp({label, items, typeOfItem, dataKey, fncs, context}: ItemProps): React.JSX.Element {
     const {data, setData} = useContext(context);
@@ -50,9 +41,7 @@ export function ItemComp({label, items, typeOfItem, dataKey, fncs, context}: Ite
     } else if (typeOfItem == "list") {
         item = (<ItemWithList typeOfItem={typeOfItem} key={label} label={label} items={items} dataKey={dataKey} fncs={fncs} context={context}></ItemWithList>)
     } else {
-        item = (<ItemWithMenu key={label} label={label} items={items} dataKey={dataKey} typeOfItem={typeOfItem} fncs={fncs}></ItemWithMenu>);
+        item = (<ItemWithMenu key={label} context={context} label={label} items={items} dataKey={dataKey} typeOfItem={typeOfItem} fncs={fncs}></ItemWithMenu>);
     }
     return item;
 }
-
-export type { ItemProps };

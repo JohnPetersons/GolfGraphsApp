@@ -4,7 +4,8 @@ import {
     View,
     } from 'react-native';
 import { ItemWithMenu } from './ItemWithMenu';
-import { ItemComp, ItemProps } from './ItemComp';
+import { ItemComp } from './ItemComp';
+import { ItemProps } from '../config/types';
 import styles from "../styles/itemStyles"; 
 
 export function ItemWithList ({label, items, dataKey, fncs, context}: ItemProps): React.JSX.Element {

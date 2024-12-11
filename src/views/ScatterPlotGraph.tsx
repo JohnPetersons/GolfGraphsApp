@@ -5,16 +5,9 @@ import {
     Text,
     View,
     } from 'react-native';
-import type {Context, PropsWithChildren} from 'react';
 import{Circle,Svg}from'react-native-svg';
 import styles from "../styles/itemStyles"; 
-import { ItemComp, ItemProps } from './ItemComp';
-import { DataContextType } from '../../App';
-
-export type ScatterPlotGraphProps = PropsWithChildren<{
-    label: string,
-    data: any
-}>;
+import { ScatterPlotGraphProps } from '../config/types';
 
 export function ScatterPlotGraph({label, data}: ScatterPlotGraphProps): React.JSX.Element {
 

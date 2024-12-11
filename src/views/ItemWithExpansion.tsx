@@ -7,22 +7,10 @@ import {
     } from 'react-native';
 import type {Context, PropsWithChildren} from 'react';
 import styles from "../styles/itemStyles"; 
-import { ItemComp, ItemProps } from './ItemComp';
-import { DataContextType } from '../../App';
+import { ItemComp } from './ItemComp';
+import { DataContextType, ItemProps } from '../config/types';
 
-export type ItemWithExpansionProps = PropsWithChildren<{
-    label: string,
-    items: ItemProps[],
-    typeOfItem: string,
-    context: Context<DataContextType>,
-    dataKey: string,
-    fncs: {
-        titleOnPressFnc: (item: ItemProps) => void,
-        currentItemsOnPressFnc: (items: ItemProps[]) => void
-    }
-}>;
-
-export function ItemWithExpansion({label, items, dataKey, fncs, context}: ItemWithExpansionProps): React.JSX.Element {
+export function ItemWithExpansion({label, items, dataKey, fncs, context}: ItemProps): React.JSX.Element {
 
     const [expansionItems, toggleExpansion] = useState([] as ItemProps[]);
 

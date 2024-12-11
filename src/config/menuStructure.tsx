@@ -1,3 +1,5 @@
+import { MenuStructureType } from "./types";
+
 export const menus = [{
     label: "Item 1",
     typeOfItem: "menu",
@@ -76,11 +78,13 @@ export const menus = [{
 },{
     label: "List Item Test",
     typeOfItem: "list",
+    fncs: {},
     items: [{
         label: "List Item Inner Item",
         typeOfItem: "inlineInput",
+        fncs: {},
         items:[],
         dataKey: ["testListInput"]
     }],
     dataKey: ["ItemListTest"]
-}];
+}] as MenuStructureType[];
