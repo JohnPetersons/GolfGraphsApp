@@ -48,6 +48,8 @@ export function ItemWithList ({label, items, dataKey, fncs, context}: ItemProps)
 
     return (
         <View>
+            <ItemComp dataKey={[dataKey[0], "default"]} label={label + " default"} context={context}
+                    items={items} fncs={fncs} typeOfItem="menu"></ItemComp>
             {dataItems.map((item: any) => 
                 <View key={label + " " + item[1]} >
                     <ItemComp dataKey={item} label={label + " " + item[1]} context={context}
