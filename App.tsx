@@ -6,6 +6,38 @@
  */
 
 // import React from 'react';
+
+/*
+
+TODO:
+
+be able to add to the data
+be able to remove from the data
+structure the data so it's not just test data anymore
+grab the data for the graph
+use accelerometer and gyroscope to get close enough data
+  1) convert accelerometer and gyroscope data into real world direction of movement
+  2) convert acceleration into current velocity
+  3) keep track of 
+    a) velocity from target line to ball position
+    b) ball position to next ball position
+  4) calculate distance from target point perpindicular to target line
+  - pressing add target line start point adds another start line vector3 object to the position array
+  - pressing add ball position adds another ball position vector3 object to the position array
+  - the accelerometer always adds to the last element in the position array
+  - the first swing is the total distance between the first ball position and the second
+  - the first target line is the distance between the first ball position and the first target line position
+  - the order to input is 
+    - select ball position
+      - either as a new shot or as on the green
+    - select target line
+    - hit ball
+    - go to ball
+    - enter other data on the way to the ball
+    - repeat
+  - if the velocity, after calculating it from acceleration, is below a certain threshold assume the phone is not moving
+*/
+
 import {
   useState,
   useEffect,
@@ -42,6 +74,9 @@ function App(): React.JSX.Element {
     "Item4": "test",
     "TestInputabc": "Woot",
     "ItemListTest": {
+      "default": {
+        "testListInput": "default"
+      },
       "0": {
         "testListInput": "0"
       },
@@ -68,9 +103,9 @@ function App(): React.JSX.Element {
     if (!loaded) {
       AsyncStorage.getItem("testDataSet" as string).then((val) => {
         setLoaded(true);
-        // setData(itemData as any); // uncomment to reset on load
+        setData(itemData as any); // uncomment to reset on load
         const parsedVal = val != null?JSON.parse(val as any):itemData;
-        setData(parsedVal);
+        // setData(parsedVal);
       });
     }
   } catch (error) {
