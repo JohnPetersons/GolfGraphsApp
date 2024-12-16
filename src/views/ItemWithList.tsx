@@ -18,7 +18,7 @@ export function ItemWithList ({label, items, dataKey, fncs, context}: ItemProps)
     function addNewData() {
         listData[(Object.keys(listData).length - 1).toString()] = JSON.parse(JSON.stringify(listData["default"]));
         setData(dataKey, listData);
-        setUpdated(true);
+        setUpdated(!updated);
     }
 
     function removeData(index: string) {
@@ -34,7 +34,7 @@ export function ItemWithList ({label, items, dataKey, fncs, context}: ItemProps)
             }
         }
         setData(dataKey, result);
-        setUpdated(true);
+        setUpdated(!updated);
     }
 
     if (listData != null) {
